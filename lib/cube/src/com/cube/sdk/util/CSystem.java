@@ -2,6 +2,7 @@ package com.cube.sdk.util;
 
 import java.io.File;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -24,6 +25,18 @@ public class CSystem {
 		} catch (Exception e){
 			Log.e(TAG, e.getMessage());
 		}
+	}
+	
+	public static String getCurrentProcName(Context context){
+		int pid = android.os.Process.myPid();
+		ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+		for(ActivityManager.RunningAppProcessInfo rapi : am.getRunningAppProcesses()){
+			if(rapi.pid == pid){
+				return rapi.processName;
+			}
+		}
+		
+		return null;
 	}
 	
 }
