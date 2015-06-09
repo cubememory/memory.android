@@ -30,6 +30,6 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="24dp"
         android:contentDescription="@string/example_desc_record_photo"
-        android:src="@drawable/sample_photo" />
+        android:src="@drawable/image_sample_photo" />
 
 </RelativeLayout>

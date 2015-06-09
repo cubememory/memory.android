@@ -34,6 +34,6 @@
         android:layout_marginTop="6dp"
         android:scaleType="centerCrop"
         android:contentDescription="@string/example_desc_record_photo"
-        android:src="@drawable/sample_photo" />
+        android:src="@drawable/image_sample_photo" />
 
 </RelativeLayout>

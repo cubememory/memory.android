@@ -33,9 +33,9 @@ public class ViewPhotoRecordItem extends RelativeLayout{
 		/*set the content for every view item*/
 		mDateTextView.setText(record.getDate());
 		mWeatherTextView.setText(record.getWeather());
-		mPhotoImageView.setImageResource(R.drawable.sample_photo);
+		mPhotoImageView.setImageResource(R.drawable.image_sample_photo);
 		
-		mPhotoImageView.setOnClickListener(new PhotoImageOnClickListener(context, R.drawable.sample_photo));
+		mPhotoImageView.setOnClickListener(new PhotoImageOnClickListener(context, R.drawable.image_sample_photo));
 	}
 	
 	public static class PhotoImageOnClickListener implements View.OnClickListener{
