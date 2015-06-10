@@ -1,5 +1,6 @@
 package com.cube.memory.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -27,6 +28,8 @@ public class ActivityStartPage extends ActivityBase{
 	}
 	
 	private void gotoHomePage(){
-		
+		Intent intent = new Intent(this, ActivityHomePage.class);
+		this.startActivity(intent);
+		this.finish();
 	}
 }
