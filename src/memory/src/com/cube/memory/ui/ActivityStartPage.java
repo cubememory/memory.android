@@ -32,5 +32,6 @@ public class ActivityStartPage extends ActivityBase{
 		this.startActivity(intent);
 		this.finish();
 		//for test git
+		//for test git 2
 	}
 }
