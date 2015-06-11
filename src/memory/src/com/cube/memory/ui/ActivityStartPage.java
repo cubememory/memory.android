@@ -31,5 +31,6 @@ public class ActivityStartPage extends ActivityBase{
 		Intent intent = new Intent(this, ActivityHomePage.class);
 		this.startActivity(intent);
 		this.finish();
+		//for test git
 	}
 }
