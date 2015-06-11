@@ -28,6 +28,6 @@ public class ViewVideoRecordItem extends RelativeLayout{
 	
 		mDateTextView.setText(record.getDate());
 		mWeatherTextView.setText(record.getWeather());
-		mPhotoImageView.setImageResource(R.drawable.sample_photo);
+		mPhotoImageView.setImageResource(R.drawable.image_sample_photo);
 	}
 }

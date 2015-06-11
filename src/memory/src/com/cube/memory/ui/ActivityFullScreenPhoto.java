@@ -15,7 +15,7 @@ public class ActivityFullScreenPhoto extends Activity {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.activity_full_screen_photo);
 		
-		int resID = getIntent().getIntExtra("res_id", R.drawable.sample_photo);
+		int resID = getIntent().getIntExtra("res_id", R.drawable.image_sample_photo);
 		
 		mImageView = (ImageView)findViewById(R.id.image_full_screen_photo);
 		mImageView.setScaleType(ScaleType.CENTER_CROP);

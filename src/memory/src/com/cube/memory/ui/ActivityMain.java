@@ -19,7 +19,7 @@ public class ActivityMain extends FragmentActivity {
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
 		
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_home_page);
 		
 		mTabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
 		mTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
@@ -45,7 +45,7 @@ public class ActivityMain extends FragmentActivity {
 		public void onTabChanged(String tabId) {
 			if(tabId.equals("record")){
 				Intent intent = new Intent(mContext, ActivityFullScreenPhoto.class);
-				intent.putExtra("res_id", R.drawable.sample_photo);
+				intent.putExtra("res_id", R.drawable.image_sample_photo);
 				mContext.startActivity(intent);
 			}
 		}		
