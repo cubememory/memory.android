@@ -4,17 +4,17 @@
     android:layout_height="match_parent" >
 
     <TextView
-        android:id="@+id/text_count"
+        android:id="@+id/text_center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/text_date"
-        android:layout_alignBottom="@+id/text_date"
+        android:layout_alignBaseline="@+id/text_left"
+        android:layout_alignBottom="@+id/text_left"
         android:layout_centerHorizontal="true"
         android:text="@string/sample_text_count"
         android:textSize="@dimen/text_size_medium" />
 
     <TextView
-        android:id="@+id/text_date"
+        android:id="@+id/text_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -24,7 +24,7 @@
         android:textSize="@dimen/text_size_large" />
 
     <TextView
-        android:id="@+id/text_more"
+        android:id="@+id/text_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -37,9 +37,9 @@
         android:id="@+id/grid_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/text_date"
-        android:layout_alignStart="@+id/text_date"
-        android:layout_below="@+id/text_date"
+        android:layout_alignLeft="@+id/text_left"
+        android:layout_alignStart="@+id/text_left"
+        android:layout_below="@+id/text_left"
         android:numColumns="2" >
     </GridView>
 

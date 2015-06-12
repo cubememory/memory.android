@@ -1,4 +1,4 @@
-package com.cube.memory.ui;
+package com.cube.memory.widget;
 
 import android.support.v4.app.ListFragment;
 

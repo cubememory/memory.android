@@ -11,6 +11,7 @@ import android.widget.Toast;
 import android.widget.TabHost.OnTabChangeListener;
 
 import com.cube.memory.phone.R;
+import com.cube.memory.widget.FragmentPhotoRecord;
 
 public class ActivityHomePage extends FragmentActivity {
 	private FragmentTabHost mTabHost;

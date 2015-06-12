@@ -1,4 +1,4 @@
-package com.cube.memory.ui;
+package com.cube.memory.widget;
 
 import java.util.List;
 
