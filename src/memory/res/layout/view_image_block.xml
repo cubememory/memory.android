@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/text_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/text_date"
+        android:layout_alignBottom="@+id/text_date"
+        android:layout_centerHorizontal="true"
+        android:text="@string/sample_text_count"
+        android:textSize="@dimen/text_size_medium" />
+
+    <TextView
+        android:id="@+id/text_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/sample_text_date"
+        android:textSize="@dimen/text_size_large" />
+
+    <TextView
+        android:id="@+id/text_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/sample_text_more"
+        android:textSize="@dimen/text_size_large" />
+
+    <GridView
+        android:id="@+id/grid_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text_date"
+        android:layout_alignStart="@+id/text_date"
+        android:layout_below="@+id/text_date"
+        android:numColumns="2" >
+    </GridView>
+
+</RelativeLayout>

@@ -7,8 +7,9 @@
     <string name="tab_name_record">Record</string>
     <string name="tab_name_share">Share</string>
     <string name="tab_name_setting">Setting</string>
-    <string name="example_record_date">2015.03.15</string>
-    <string name="example_record_weather">cloudy</string>
-    <string name="example_desc_record_photo">photo</string>
+    <string name="sample_text_date">2015.03.15</string>
+    <string name="sample_text_count">total 3 photos</string>
+    <string name="sample_text_more">more</string>
+    <string name="sample_photo_desc">photo</string>
 
 </resources>
