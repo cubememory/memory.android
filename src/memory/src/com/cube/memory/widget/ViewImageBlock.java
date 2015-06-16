@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.cube.memory.entity.EntityPhotoItem;
+import com.cube.memory.entity.EntityPhoto;
 import com.cube.memory.phone.R;
 import com.cube.memory.util.CubeImageLoader;
 import com.cube.memory.util.CubeInflater;
@@ -45,9 +45,9 @@ public class ViewImageBlock extends RelativeLayout{
 	private static class AdapterGridView extends BaseAdapter{
 		private Context mContext;
 		
-		private List<EntityPhotoItem> photoItems = new ArrayList<EntityPhotoItem>();
+		private List<EntityPhoto> photoItems = new ArrayList<EntityPhoto>();
 		
-		public AdapterGridView(Context context, List<EntityPhotoItem> photoItems){
+		public AdapterGridView(Context context, List<EntityPhoto> photoItems){
 			this.mContext = context;
 			this.photoItems.addAll(photoItems);
 		}
@@ -85,7 +85,9 @@ public class ViewImageBlock extends RelativeLayout{
 		private String textLeft;
 		private String textCenter;
 		private String textRight;
-		private List<EntityPhotoItem> listImages;
+		private List<EntityPhoto> listImages;
+		
+		
 		public String getTextLeft() {
 			return textLeft;
 		}
@@ -104,10 +106,10 @@ public class ViewImageBlock extends RelativeLayout{
 		public void setTextRight(String textRight) {
 			this.textRight = textRight;
 		}
-		public List<EntityPhotoItem> getListImages() {
+		public List<EntityPhoto> getListImages() {
 			return listImages;
 		}
-		public void setListImages(List<EntityPhotoItem> listImages) {
+		public void setListImages(List<EntityPhoto> listImages) {
 			this.listImages = listImages;
 		}
 		

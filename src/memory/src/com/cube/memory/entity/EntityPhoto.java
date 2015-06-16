@@ -1,8 +1,8 @@
 package com.cube.memory.entity;
 
-public class EntityVideoItem {
+public class EntityPhoto {
 	private String date;
-	private String url;
+	private String uri;
 	
 	public String getDate() {
 		return date;
@@ -10,10 +10,10 @@ public class EntityVideoItem {
 	public void setDate(String date) {
 		this.date = date;
 	}
-	public String getUrl() {
-		return url;
+	public String getUri() {
+		return uri;
 	}
-	public void setUrl(String url) {
-		this.url = url;
+	public void setUri(String uri) {
+		this.uri = uri;
 	}
 }

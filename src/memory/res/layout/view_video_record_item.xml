@@ -10,7 +10,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:text="@string/example_record_date" />
+        android:text="@string/sample_text_date" />
 
     <TextView
         android:id="@+id/text_record_weather"
@@ -19,7 +19,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:text="@string/example_record_weather" />
+        android:text="@string/sample_text_date" />
 
     <ImageView
         android:id="@+id/image_record_photo"
@@ -29,7 +29,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="24dp"
-        android:contentDescription="@string/example_desc_record_photo"
+        android:contentDescription="@string/sample_text_date"
         android:src="@drawable/image_sample_photo" />
 
 </RelativeLayout>

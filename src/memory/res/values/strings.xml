@@ -2,11 +2,18 @@
 <resources>
 
     <string name="app_name">memory</string>
+    
     <string name="tab_name_local"> Local</string>
     <string name="tab_name_network">Network</string>
     <string name="tab_name_record">Record</string>
     <string name="tab_name_share">Share</string>
     <string name="tab_name_setting">Setting</string>
+    
+    <string name="tab_name_photo">Photo</string>
+    <string name="tab_name_video">Video</string>
+    
+    <string name="message_no_data">this is no data to display</string>
+    <string name="sample_text">this is an sample text value</string>
     <string name="sample_text_date">2015.03.15</string>
     <string name="sample_text_count">total 3 photos</string>
     <string name="sample_text_more">more</string>

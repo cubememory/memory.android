@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.cube.memory.ui.ActivityStartPage"
+            android:name="com.cube.memory.activity.ActivityStartPage"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar" >
             <intent-filter>
@@ -24,14 +24,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.cube.memory.ui.ActivityHomePage"
+            android:name="com.cube.memory.activity.ActivityHomePage"
             android:label="@string/app_name" >
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.cube.memory.ui.ActivityFullScreenPhoto"
+            android:name="com.cube.memory.activity.ActivityFullScreenPhoto"
             android:label="@string/app_name" >
             <intent-filter>
                 <category android:name="android.intent.category." />

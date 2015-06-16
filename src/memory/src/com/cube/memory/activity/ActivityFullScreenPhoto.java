@@ -1,4 +1,4 @@
-package com.cube.memory.ui;
+package com.cube.memory.activity;
 
 import android.app.Activity;
 import android.os.Bundle;

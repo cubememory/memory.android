@@ -1,4 +1,4 @@
-package com.cube.memory.ui;
+package com.cube.memory.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,7 +24,7 @@ public class ActivityStartPage extends ActivityBase{
 				gotoHomePage();
 			}
 			
-		}, 3000);
+		}, 1000);
 	}
 	
 	private void gotoHomePage(){
