@@ -1,7 +1,6 @@
 package com.cube.memory.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
@@ -9,6 +8,7 @@ import android.widget.TabHost.OnTabChangeListener;
 
 import com.cube.memory.fragment.FragmentLocal;
 import com.cube.memory.phone.R;
+import com.cube.memory.util.CubeUtils;
 
 public class ActivityHomePage extends FragmentActivity {
 	private FragmentTabHost mTabHost;
@@ -45,9 +45,7 @@ public class ActivityHomePage extends FragmentActivity {
 		@Override
 		public void onTabChanged(String tabId) {
 			if(tabId.equals("record")){
-				Intent intent = new Intent(mContext, ActivityFullScreenPhoto.class);
-				intent.putExtra("res_id", R.drawable.image_sample_photo);
-				mContext.startActivity(intent);
+				CubeUtils.startCamera(mContext);
 			}
 		}		
 	}
