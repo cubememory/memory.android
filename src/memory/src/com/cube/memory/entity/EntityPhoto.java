@@ -4,6 +4,11 @@ public class EntityPhoto {
 	private String date;
 	private String uri;
 	
+	public EntityPhoto(String date, String uri){
+		this.date = date;
+		this.uri = uri;
+	}
+	
 	public String getDate() {
 		return date;
 	}

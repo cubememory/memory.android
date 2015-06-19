@@ -10,4 +10,10 @@ public class CubeInflater {
 		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(resource, root);		
 	}
+	
+	public static void inflate(Context context, int resource, ViewGroup root, boolean attachToRoot){
+		/*inflate the layout xml for view record item*/
+		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		inflater.inflate(resource, root, attachToRoot);		
+	}
 }
