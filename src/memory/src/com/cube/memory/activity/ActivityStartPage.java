@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.cube.memory.phone.R;
+import com.cube.memory.setup.ModuleManager;
 
 public class ActivityStartPage extends ActivityBase{
 	private Handler mHandler;
@@ -14,6 +15,8 @@ public class ActivityStartPage extends ActivityBase{
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.activity_start_page);
 		this.gotoHomePageLater();
+		
+		ModuleManager.setup(this.getApplicationContext());
 	}
 	
 	private void gotoHomePageLater(){
@@ -28,8 +31,7 @@ public class ActivityStartPage extends ActivityBase{
 	}
 	
 	private void gotoHomePage(){
-		Intent intent = new Intent(this, ActivityHomePage.class);
-		this.startActivity(intent);
+		Navigator.startHomePage(this);
 		this.finish();
 	}
 }

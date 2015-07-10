@@ -1,15 +1,12 @@
 package com.cube.memory.fragment;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -17,11 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.cube.memory.entity.EntityPhoto;
 import com.cube.memory.phone.R;
 import com.cube.memory.util.CubeMediaScanner;
-import com.cube.memory.widget.ViewImageBlock;
-import com.cube.memory.widget.ViewImageBlock.EntityImageBlock;
+import com.cube.memory.widget.ViewSection;
 
 public class FragmentPhoto extends ListFragment {
 	private AdapterPhotos mAdapterPhotos;
@@ -33,13 +28,18 @@ public class FragmentPhoto extends ListFragment {
 		
 		mAdapterPhotos = new AdapterPhotos(this.getActivity());
 		this.setListAdapter(mAdapterPhotos);
+		
+		
+		/*
 		if(Looper.myLooper() != null){
 			mHandler = new Handler(mAdapterPhotos);
 		}
 		this.getImages(mHandler);
-		
+		*/
 		return view;
 	}
+	
+	
 	
 	private void getImages(final Handler handler){
 		new Thread(new Runnable(){			
@@ -55,32 +55,30 @@ public class FragmentPhoto extends ListFragment {
 	private class AdapterPhotos extends BaseAdapter implements Handler.Callback{
 		private Context mContext;
 		
-		private List<String> mKeys = new ArrayList<String>();
-		private Map<String, List<EntityPhoto>> mAlbums = new HashMap<String, List<EntityPhoto>>();
-
 		public AdapterPhotos(Context context) {
 			this.mContext = context;
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
+			ViewSection vib = new ViewSection(mContext);
 			
-			String date = mKeys.get(position);
-			
-			EntityImageBlock eib = new EntityImageBlock();
-			eib.setTextLeft(date);
-			eib.setTextCenter(String.valueOf(mAlbums.get(date).size()));
-			eib.setTextRight("more");
-			eib.setListImages(mAlbums.get(date));
-			
-			ViewImageBlock vib = new ViewImageBlock(mContext, eib);
+			vib.setData(new Date(System.currentTimeMillis()), 200, this.getSampleImages());
 			
 			return vib;
+		}
+		
+		private List<String> getSampleImages(){
+			List<String> images = new ArrayList<String>();
+			for(int i=0; i<13; i++){
+				images.add("http://oimageb1.ydstatic.com/image?id=-1774447979293667868&product=adpublish&w=250&h=250");
+			}
+			return images;
 		}
 
 		@Override
 		public boolean handleMessage(Message msg) {
-			List<CubeMediaScanner.Image> images = (List<CubeMediaScanner.Image>)msg.obj;
+			/*List<CubeMediaScanner.Image> images = (List<CubeMediaScanner.Image>)msg.obj;
 			this.addAlbums(images);
 			this.mKeys = new ArrayList<String>();
 			
@@ -90,28 +88,35 @@ public class FragmentPhoto extends ListFragment {
 			}
 			
 			this.notifyDataSetChanged();
-			
+			*/
 			return false;
 		}
 		
-		private void addAlbums(List<CubeMediaScanner.Image> images){	
-			for(CubeMediaScanner.Image image: images){
+		public void addAlbums(List<CubeMediaScanner.Image> images){	
+		/*	for(CubeMediaScanner.Image image: images){
 				if(!this.mAlbums.containsKey(image.getDate())){
 					List<EntityPhoto> photos = new ArrayList<EntityPhoto>();
 					mAlbums.put(image.getDate(), photos);
 				}
 				mAlbums.get(image.getDate()).add(new EntityPhoto(image.getDate(), image.getPath()));
 			}
+			
+			this.mKeys = new ArrayList<String>();
+			
+			Iterator<String> iter = this.mAlbums.keySet().iterator();
+			while(iter.hasNext()){
+				this.mKeys.add(iter.next());
+			}*/
 		}
 
 		@Override
 		public int getCount() {
-			return mAlbums.size();
+			return 16;
 		}
 
 		@Override
 		public Object getItem(int position) {
-			return mAlbums.get(mKeys.get(position));
+			return null;
 		}
 
 		@Override

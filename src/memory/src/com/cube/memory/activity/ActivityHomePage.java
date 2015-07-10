@@ -18,7 +18,6 @@ public class ActivityHomePage extends FragmentActivity {
 		super.onCreate(arg0);
 		
 		this.setContentView(R.layout.activity_home_page);
-		
 		this.setupTabs();
 	}
 	

@@ -17,7 +17,7 @@
     <string name="sample_text">这是一段测试文本</string>
     <string name="sample_text_date">2015.03.15</string>
     <string name="sample_text_count">总共3张图片</string>
-    <string name="sample_text_more">更多</string>
+    <string name="sample_text_more">更多>></string>
     <string name="sample_photo_desc">图片</string>
 
 </resources>

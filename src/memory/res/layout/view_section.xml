@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="wrap_content"
+    android:paddingBottom="8dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="8dp" >
 
     <TextView
-        android:id="@+id/text_center"
+        android:id="@+id/text_total"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/text_left"
-        android:layout_alignBottom="@+id/text_left"
+        android:layout_alignBaseline="@+id/text_date"
+        android:layout_alignBottom="@+id/text_date"
         android:layout_centerHorizontal="true"
         android:text="@string/sample_text_count"
         android:textSize="@dimen/text_size_medium" />
 
     <TextView
-        android:id="@+id/text_left"
+        android:id="@+id/text_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -24,7 +28,7 @@
         android:textSize="@dimen/text_size_large" />
 
     <TextView
-        android:id="@+id/text_right"
+        android:id="@+id/text_more"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -33,14 +37,17 @@
         android:text="@string/sample_text_more"
         android:textSize="@dimen/text_size_large" />
 
-    <GridView
-        android:id="@+id/grid_image"
+    <com.cube.memory.widget.ViewGrid
+        android:id="@+id/grid_images"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/text_left"
-        android:layout_alignStart="@+id/text_left"
-        android:layout_below="@+id/text_left"
-        android:numColumns="2" >
-    </GridView>
+        android:layout_alignLeft="@+id/text_date"
+        android:layout_alignStart="@+id/text_date"
+        android:layout_below="@+id/text_date"
+        android:stretchMode="columnWidth"
+        android:horizontalSpacing="2dip"
+        android:verticalSpacing="2dip"
+        android:scrollbars="none"
+        android:numColumns="2" />
 
 </RelativeLayout>
