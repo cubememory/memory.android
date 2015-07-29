@@ -1,15 +1,7 @@
 package com.cube.sdk.dump;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.PrintWriter;
 import java.lang.Thread.UncaughtExceptionHandler;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import android.content.Context;
 

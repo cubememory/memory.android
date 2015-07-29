@@ -71,7 +71,7 @@ public class FragmentPhoto extends ListFragment {
 		private List<String> getSampleImages(){
 			List<String> images = new ArrayList<String>();
 			for(int i=0; i<13; i++){
-				images.add("http://oimageb1.ydstatic.com/image?id=-1774447979293667868&product=adpublish&w=250&h=250");
+				images.add("file://system/media/Pre-loaded/Pictures/Picture_01_Shark.jpg");
 			}
 			return images;
 		}

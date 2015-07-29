@@ -1,5 +1,7 @@
 package com.cube.memory.activity;
 
+import java.util.List;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -8,6 +10,7 @@ import android.widget.TabHost.OnTabChangeListener;
 
 import com.cube.memory.fragment.FragmentLocal;
 import com.cube.memory.phone.R;
+import com.cube.memory.util.CubeMediaScanner;
 import com.cube.memory.util.CubeUtils;
 
 public class ActivityHomePage extends FragmentActivity {
@@ -16,7 +19,7 @@ public class ActivityHomePage extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
-		
+		List<CubeMediaScanner.Image> images = CubeMediaScanner.getImages(this.getApplicationContext());
 		this.setContentView(R.layout.activity_home_page);
 		this.setupTabs();
 	}

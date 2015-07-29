@@ -12,12 +12,12 @@ import android.provider.MediaStore;
 
 import com.cube.sdk.util.CFormat;
 
-public class CubeMediaScanner {	
+public class CubeMediaScanner {
 	public static List<Image> getImages(Context context){
 		List<Image> images = new ArrayList<Image>();
 		
 		images.addAll(getImages(context, MediaStore.Images.Media.INTERNAL_CONTENT_URI));
-		images.addAll(getImages(context, MediaStore.Images.Media.INTERNAL_CONTENT_URI));
+		images.addAll(getImages(context, MediaStore.Images.Media.EXTERNAL_CONTENT_URI));
 		
 		return images;
 	}
@@ -27,7 +27,7 @@ public class CubeMediaScanner {
 		List<Image> images = new ArrayList<Image>();
 		
 		ContentResolver resolver = context.getContentResolver();
-		Cursor cursor = resolver.query(MediaStore.Images.Media.INTERNAL_CONTENT_URI, null, null, null, null);
+		Cursor cursor = resolver.query(uri, null, null, null, null);
 		
 		while(cursor.moveToNext()){
 			Image image = new Image();
@@ -49,7 +49,7 @@ public class CubeMediaScanner {
 		
 		return images;
 	}
-	
+		
 	public static class Image{
 		private String type;
 		private String name;
