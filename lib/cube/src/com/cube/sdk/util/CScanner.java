@@ -1,3 +1,7 @@
+/**
+ * wrap the media scanner for image/video/audio/...
+ * @author wruibo
+ */
 package com.cube.sdk.util;
 
 import java.util.ArrayList;
@@ -13,28 +17,35 @@ import android.provider.MediaStore;
 
 public class CScanner {
 	public static class BaseItem{
-		public int id;
-		public int count;
+		//unique row id for the item
+		public int _id;
+		//the count of rows in the directory
+		public int _count;
 	}
 	
 	public static class MediaItem extends BaseItem{
+		//display name of the file
 		public String name;
+		//the title of the content
 		public String title;
+		//file path of the media
 		public String path;
-		public String type;
-		
+		//mime type of the media file
+		public String mimeType;
+		//whether the media file is drm-protected
 		public int isDrm;
-		
+		//size of the file in bytes
 		public long size;
 		
+		//the width for the media(image/video) in pixels
 		public int width;
+		//the height for the media(image/video) in pixels		
 		public int height;
-		
-		public int latitude;
-		public int longitude;
-		
+
+		//unix time stamp in million seconds for the media file add to the media store
 		public long createTime;
-		public long modifyTime;
+		//unix time stamp in million seconds for the media file last modified
+		public long modifiedTime;
 
 	}
 	
@@ -54,21 +65,32 @@ public class CScanner {
 			Cursor cursor = resolver.query(uri, null, null, null, null);
 			while(cursor.moveToNext()){
 				Item item = new Item();
-				item.name = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DISPLAY_NAME));
-				item.path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA));
-				item.type = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.MIME_TYPE));
-				item.size = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.ImageColumns.SIZE));
+				item._id = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns._ID));
+				item._count = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns._COUNT));
 				
+				item.name = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DISPLAY_NAME));
+				item.title = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.TITLE));
+				item.path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA));
+				item.mimeType = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.MIME_TYPE));
+				item.isDrm = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.IS_PRIVATE));
+				item.size = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.ImageColumns.SIZE));
 				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
 					item.width = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.WIDTH));
 					item.height = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.HEIGHT));
 				}
+				item.createTime = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_ADDED));
+				item.modifiedTime = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_MODIFIED));
 				
+				item.description = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DESCRIPTION));
+				item.picasaID = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.PICASA_ID));
+				item.isPrivate = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.IS_PRIVATE));
+				item.dateTaken = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_TAKEN));
+				item.orientation = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.ORIENTATION));
 				item.latitude = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.LATITUDE));
 				item.longitude = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.LONGITUDE));
-				
-				item.createTime = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_ADDED));
-				item.modifyTime = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_MODIFIED));
+				item.miniThumbMagic = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.MINI_THUMB_MAGIC));
+				item.bucketID = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.BUCKET_ID));
+				item.bucketDisplayName = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME));
 				
 				gallery.addItem(item);
 			}
@@ -97,20 +119,31 @@ public class CScanner {
 			}
 		}
 		
-		public static class Item{
-			public String name;
-			public String path;
-			public String type;
-			public long size;
+		public static class Item extends MediaItem{
+			//the description of the image
+			public String description;
+			//the picasa id of the image
+			public String picasaID;
+			//whether the video should be published as public or private
+			public int isPrivate;
+			//unix time stamp in million seconds of the time that the image was taken
+			public long dateTaken;
+			//the orientation for the image expressed as degrees. only degrees 0, 90, 180, 270 will work.
+			public int orientation;
 			
-			public int width;
-			public int height;
+			//the longitude where the image was captured
+			public double longitude;
+			//the latitude where the image was captured
+			public double latitude;
 			
-			public int latitude;
-			public int longitude;
-			
-			public long createTime;
-			public long modifyTime;
+            //the mini thumb id.
+            public int miniThumbMagic;
+            
+            //the bucket id of the image. This is a read-only property that is automatically computed from the DATA column.
+            public String bucketID;
+            
+            //The bucket display name of the image. This is a read-only property that is automatically computed from the DATA column.
+            public String bucketDisplayName;
 		}
 	}
 	
@@ -129,25 +162,39 @@ public class CScanner {
 			ContentResolver resolver = context.getContentResolver();
 			Cursor cursor = resolver.query(uri, null, null, null, null);
 			while(cursor.moveToNext()){
-				ImageItem item = new ImageItem();
-				//item.setName(cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.)));
-				item.setPath(cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)));
-				item.setType(cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.MIME_TYPE)));
-				item.setSize(cursor.getLong(cursor.getColumnIndex(MediaStore.Images.ImageColumns.SIZE)));
+				Item item = new Item();
+				item._id = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns._ID));
+				item._count = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns._COUNT));
 				
+				item.name = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DISPLAY_NAME));
+				item.title = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.TITLE));
+				item.path = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DATA));
+				item.mimeType = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.MIME_TYPE));
+				item.isDrm = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns.IS_PRIVATE));
+				item.size = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.VideoColumns.SIZE));
 				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
-					item.setWidth(cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.WIDTH)));
-					item.setHeight(cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.HEIGHT)));
-				}else{
-					item.setWidth(0);
-					item.setHeight(0);
+					item.width = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns.WIDTH));
+					item.height = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns.HEIGHT));
 				}
+				item.createTime = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DATE_ADDED));
+				item.modifiedTime = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DATE_MODIFIED));
 				
-				item.setLatitude(cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.LATITUDE)));
-				item.setLongitude(cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.LONGITUDE)));
-				
-				item.setCreateTime(cursor.getLong(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_ADDED)));
-				item.setModifyTime(cursor.getLong(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_MODIFIED)));
+				item.duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DURATION));
+				item.artist = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.ARTIST));
+				item.album = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.ALBUM));
+				item.resolution = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.RESOLUTION));
+				item.description = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DESCRIPTION));
+				item.isPrivate = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns.IS_PRIVATE));
+				item.tags = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.TAGS));
+				item.category = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.CATEGORY));
+				item.language = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.LANGUAGE));
+				item.dateTaken = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DATE_TAKEN));
+				item.latitude = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns.LATITUDE));
+				item.longitude = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns.LONGITUDE));
+				item.miniThumbMagic = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns.MINI_THUMB_MAGIC));
+				item.bucketID = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.BUCKET_ID));
+				item.bucketDisplayName = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.BUCKET_DISPLAY_NAME));
+				item.bookmark = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.VideoColumns.BOOKMARK));
 				
 				gallery.addItem(item);
 			}
@@ -157,7 +204,7 @@ public class CScanner {
 		
 		public static class Gallery{
 			private Uri uri;
-			private List<ImageItem> items = new ArrayList<ImageItem>();
+			private List<Item> items = new ArrayList<Item>();
 			
 			public Gallery(Uri uri){
 				this.uri = uri;
@@ -167,90 +214,56 @@ public class CScanner {
 				return this.uri;
 			}
 			
-			public List<ImageItem> getItems(){
+			public List<Item> getItems(){
 				return this.items;
 			}
 			
-			public void addItem(ImageItem item){
+			public void addItem(Item item){
 				this.items.add(item);
 			}
 		}
 		
-		public static class ImageItem{
-			private String name;
-			private String path;
-			private String type;
-			private long size;
+		public static class Item extends MediaItem{
+			//the duration of the video file, in ms
+			public long duration;
+			//the artist who created the video file, if any
+			public String artist;
+			//the album the video file is from, if any
+			public String album;
+			//the resolution of the video file, formatted as "XxY"
+			public String resolution;			
+			//the description of the video
+			public String description;
+			//whether the video should be published as public or private
+			public int isPrivate;
+			//the user-added tags associated with a video
+			public String tags;
+			//the YouTube category of the video
+			public String category;
+			//The language of the video
+			public String language;
 			
-			private int width;
-			private int height;
+			//unix time stamp in million seconds of the time that the image was taken
+			public long dateTaken;
 			
-			private int latitude;
-			private int longitude;
+			//the longitude where the image was captured
+			public double longitude;
+			//the latitude where the image was captured
+			public double latitude;
 			
-			private long createTime;
-			private long modifyTime;
-			
-			public String getName() {
-				return name;
-			}
-			public void setName(String name) {
-				this.name = name;
-			}
-			public String getPath() {
-				return path;
-			}
-			public void setPath(String path) {
-				this.path = path;
-			}
-			public String getType() {
-				return type;
-			}
-			public void setType(String type) {
-				this.type = type;
-			}
-			public long getSize() {
-				return size;
-			}
-			public void setSize(long size) {
-				this.size = size;
-			}
-			public int getWidth() {
-				return width;
-			}
-			public void setWidth(int width) {
-				this.width = width;
-			}
-			public int getHeight() {
-				return height;
-			}
-			public void setHeight(int height) {
-				this.height = height;
-			}
-			public int getLatitude() {
-				return latitude;
-			}
-			public void setLatitude(int latitude) {
-				this.latitude = latitude;
-			}
-			public int getLongitude() {
-				return longitude;
-			}
-			public void setLongitude(int longitude) {
-				this.longitude = longitude;
-			}
-			public long getCreateTime() {
-				return createTime;
-			}
-			public void setCreateTime(long createTime) {
-				this.createTime = createTime;
-			}
-			public long getModifyTime() {
-				return modifyTime;
-			}
-			public void setModifyTime(long modifyTime) {
-				this.modifyTime = modifyTime;
-			}
-		}		
+            //the mini thumb id.
+            public int miniThumbMagic;
+            //the bucket id of the image. This is a read-only property that is automatically computed from the DATA column.
+            public String bucketID;
+            //The bucket display name of the image. This is a read-only property that is automatically computed from the DATA column.
+            public String bucketDisplayName;
+            /**
+             * The bookmark for the video. Time in ms. Represents the location in the video that the
+             * video should start playing at the next time it is opened. If the value is null or
+             * out of the range 0..DURATION-1 then the video should start playing from the
+             * beginning.
+             */
+            public long bookmark;
+		}
 	}
 }

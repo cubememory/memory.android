@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.cube.memory.phone.R;
-import com.cube.memory.util.CubeMediaScanner;
 import com.cube.memory.widget.ViewSection;
 
 public class FragmentPhoto extends ListFragment {
