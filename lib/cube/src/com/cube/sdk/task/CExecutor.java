@@ -20,8 +20,12 @@ public class CExecutor {
 	}
 	
 	public void init(){
+		this.init(CORE_POOL_SIZE);
+	}
+	
+	public void init(int corePoolSize){
 		this.es = Executors.newCachedThreadPool();
-		this.ses = Executors.newScheduledThreadPool(CORE_POOL_SIZE);
+		this.ses = Executors.newScheduledThreadPool(corePoolSize);
 	}
 	
 	public void submit(Runnable task){

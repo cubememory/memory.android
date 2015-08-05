@@ -1,12 +1,11 @@
 package com.cube.memory.entity;
 
-public class EntityPhoto {
+public class EntityPhoto extends EntityMedia{
 	private String date;
-	private String uri;
 	
-	public EntityPhoto(String date, String uri){
+	public EntityPhoto(String date, long mediaID, String uri){
+		super(mediaID, uri);
 		this.date = date;
-		this.uri = uri;
 	}
 	
 	public String getDate() {
@@ -14,11 +13,5 @@ public class EntityPhoto {
 	}
 	public void setDate(String date) {
 		this.date = date;
-	}
-	public String getUri() {
-		return uri;
-	}
-	public void setUri(String uri) {
-		this.uri = uri;
 	}
 }

@@ -8,19 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.annotation.TargetApi;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 
+import com.cube.sdk.log.CLogger;
+
 public class CScanner {
 	public static class BaseItem{
 		//unique row id for the item
-		public int _id;
+		public long _id;
 		//the count of rows in the directory
-		public int _count;
+		public long _count;
 	}
 	
 	public static class MediaItem extends BaseItem{
@@ -50,52 +51,63 @@ public class CScanner {
 	}
 	
 	public static class Image{
+		private final static String TAG = Image.class.getName();
+		
 		public static List<Gallery> scan(Context context){
 			List<Gallery> galleries = new ArrayList<Gallery>();
-			galleries.add(scan(context, MediaStore.Images.Media.INTERNAL_CONTENT_URI));
-			galleries.add(scan(context, MediaStore.Images.Media.EXTERNAL_CONTENT_URI));
+			try{
+				galleries.add(scan(context, MediaStore.Images.Media.INTERNAL_CONTENT_URI));
+				galleries.add(scan(context, MediaStore.Images.Media.EXTERNAL_CONTENT_URI));
+			}catch(Exception e){
+				CLogger.e(TAG, e.getMessage(), e);
+			}
 			return galleries;
 		}
 		
 		@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 		public static Gallery scan(Context context, Uri uri){
+			Cursor cursor = null;
 			Gallery gallery = new Gallery(uri);
-			
-			ContentResolver resolver = context.getContentResolver();
-			Cursor cursor = resolver.query(uri, null, null, null, null);
-			while(cursor.moveToNext()){
-				Item item = new Item();
-				item._id = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns._ID));
-				item._count = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns._COUNT));
-				
-				item.name = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DISPLAY_NAME));
-				item.title = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.TITLE));
-				item.path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA));
-				item.mimeType = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.MIME_TYPE));
-				item.isDrm = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.IS_PRIVATE));
-				item.size = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.ImageColumns.SIZE));
-				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
-					item.width = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.WIDTH));
-					item.height = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.HEIGHT));
+			try{
+				cursor = context.getContentResolver().query(uri, null, null, null, MediaStore.Images.Media.DEFAULT_SORT_ORDER);
+				while(cursor.moveToNext()){
+					Item item = new Item();
+					item._id = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.ImageColumns._ID));
+					//item._count = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.ImageColumns._COUNT));
+					
+					item.name = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DISPLAY_NAME));
+					item.title = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.TITLE));
+					item.path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA));
+					item.mimeType = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.MIME_TYPE));
+					item.isDrm = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.IS_PRIVATE));
+					item.size = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.ImageColumns.SIZE));
+					if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+						item.width = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.WIDTH));
+						item.height = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.HEIGHT));
+					}
+					item.createTime = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_ADDED));
+					item.modifiedTime = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_MODIFIED));
+					
+					item.description = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DESCRIPTION));
+					item.picasaID = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.PICASA_ID));
+					item.isPrivate = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.IS_PRIVATE));
+					item.dateTaken = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_TAKEN));
+					item.orientation = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.ORIENTATION));
+					item.latitude = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.LATITUDE));
+					item.longitude = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.LONGITUDE));
+					item.miniThumbMagic = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.MINI_THUMB_MAGIC));
+					item.bucketID = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.BUCKET_ID));
+					item.bucketDisplayName = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME));
+					
+					gallery.addItem(item);
 				}
-				item.createTime = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_ADDED));
-				item.modifiedTime = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_MODIFIED));
-				
-				item.description = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DESCRIPTION));
-				item.picasaID = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.PICASA_ID));
-				item.isPrivate = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.IS_PRIVATE));
-				item.dateTaken = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_TAKEN));
-				item.orientation = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.ORIENTATION));
-				item.latitude = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.LATITUDE));
-				item.longitude = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.LONGITUDE));
-				item.miniThumbMagic = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns.MINI_THUMB_MAGIC));
-				item.bucketID = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.BUCKET_ID));
-				item.bucketDisplayName = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME));
-				
-				gallery.addItem(item);
+			}catch(Exception e){
+				CLogger.d(TAG, e.getMessage(), e);
+			}finally{
+				if(cursor != null)
+					cursor.close();
 			}
-			
-			return gallery;		
+			return gallery;
 		}
 		
 		public static class Gallery{
@@ -148,55 +160,68 @@ public class CScanner {
 	}
 	
 	public static class Video{
+		private final static String TAG = Video.class.getName();
+		
 		public static List<Gallery> scan(Context context){
 			List<Gallery> galleries = new ArrayList<Gallery>();
-			galleries.add(scan(context, MediaStore.Video.Media.INTERNAL_CONTENT_URI));
-			galleries.add(scan(context, MediaStore.Video.Media.EXTERNAL_CONTENT_URI));
+			try{
+				galleries.add(scan(context, MediaStore.Video.Media.INTERNAL_CONTENT_URI));
+				galleries.add(scan(context, MediaStore.Video.Media.EXTERNAL_CONTENT_URI));
+			}catch(Exception e){
+				CLogger.e(TAG, e.getMessage(), e);
+			}
 			return galleries;
 		}
 		
 		@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 		public static Gallery scan(Context context, Uri uri){
+			Cursor cursor = null;
 			Gallery gallery = new Gallery(uri);
-			
-			ContentResolver resolver = context.getContentResolver();
-			Cursor cursor = resolver.query(uri, null, null, null, null);
-			while(cursor.moveToNext()){
-				Item item = new Item();
-				item._id = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns._ID));
-				item._count = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns._COUNT));
-				
-				item.name = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DISPLAY_NAME));
-				item.title = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.TITLE));
-				item.path = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DATA));
-				item.mimeType = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.MIME_TYPE));
-				item.isDrm = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns.IS_PRIVATE));
-				item.size = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.VideoColumns.SIZE));
-				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
-					item.width = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns.WIDTH));
-					item.height = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns.HEIGHT));
+			try{
+				cursor = context.getContentResolver().query(uri, null, null, null, null);
+				while(cursor.moveToNext()){
+					Item item = new Item();
+					item._id = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.VideoColumns._ID));
+					//item._count = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.VideoColumns._COUNT));
+					
+					item.name = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DISPLAY_NAME));
+					item.title = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.TITLE));
+					item.path = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DATA));
+					item.mimeType = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.MIME_TYPE));
+					item.isDrm = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns.IS_PRIVATE));
+					item.size = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.VideoColumns.SIZE));
+					if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+						item.width = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns.WIDTH));
+						item.height = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns.HEIGHT));
+					}
+					item.createTime = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DATE_ADDED));
+					item.modifiedTime = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DATE_MODIFIED));
+					
+					item.duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DURATION));
+					item.artist = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.ARTIST));
+					item.album = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.ALBUM));
+					item.resolution = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.RESOLUTION));
+					item.description = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DESCRIPTION));
+					item.isPrivate = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns.IS_PRIVATE));
+					item.tags = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.TAGS));
+					item.category = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.CATEGORY));
+					item.language = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.LANGUAGE));
+					item.dateTaken = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DATE_TAKEN));
+					item.latitude = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns.LATITUDE));
+					item.longitude = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns.LONGITUDE));
+					item.miniThumbMagic = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns.MINI_THUMB_MAGIC));
+					item.bucketID = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.BUCKET_ID));
+					item.bucketDisplayName = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.BUCKET_DISPLAY_NAME));
+					item.bookmark = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.VideoColumns.BOOKMARK));
+					
+					gallery.addItem(item);
 				}
-				item.createTime = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DATE_ADDED));
-				item.modifiedTime = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DATE_MODIFIED));
-				
-				item.duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DURATION));
-				item.artist = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.ARTIST));
-				item.album = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.ALBUM));
-				item.resolution = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.RESOLUTION));
-				item.description = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DESCRIPTION));
-				item.isPrivate = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns.IS_PRIVATE));
-				item.tags = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.TAGS));
-				item.category = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.CATEGORY));
-				item.language = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.LANGUAGE));
-				item.dateTaken = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DATE_TAKEN));
-				item.latitude = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns.LATITUDE));
-				item.longitude = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns.LONGITUDE));
-				item.miniThumbMagic = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns.MINI_THUMB_MAGIC));
-				item.bucketID = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.BUCKET_ID));
-				item.bucketDisplayName = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.BUCKET_DISPLAY_NAME));
-				item.bookmark = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.VideoColumns.BOOKMARK));
-				
-				gallery.addItem(item);
+			
+			}catch(Exception e){
+				CLogger.e(TAG, e.getMessage(), e);
+			}finally{
+				if(cursor != null)
+					cursor.close();
 			}
 			
 			return gallery;		

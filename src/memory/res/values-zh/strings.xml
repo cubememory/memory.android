@@ -20,4 +20,6 @@
     <string name="sample_text_more">更多>></string>
     <string name="sample_photo_desc">图片</string>
 
+    <string name="tip_loading_title">请稍后</string>
+    <string name="tip_loading_body">正在加载数据</string>
 </resources>

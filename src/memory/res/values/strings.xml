@@ -13,13 +13,16 @@
     <string name="tab_name_video">Video</string>
     
     <string name="message_no_data">this is no data to display</string>
+    
     <string name="sample_text">this is an sample text value</string>
     <string name="sample_text_date">2015.03.15</string>
     <string name="sample_text_count">total 3 photos</string>
     <string name="sample_text_more">more>></string>
     <string name="sample_photo_desc">photo</string>
     
-    <string name="item_name_date">%1$d年%2$d月%3$d日</string>
-    <string name="item_name_total">总共%1$d张</string>
+    <string name="item_name_date">%1$dyear%2$dmon%3$day</string>
+    <string name="item_name_total">total%1$dphotos</string>
 
+    <string name="tip_loading_title">please wait</string>
+    <string name="tip_loading_body">loading data</string>
 </resources>

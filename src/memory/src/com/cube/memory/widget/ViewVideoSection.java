@@ -1,11 +1,13 @@
 package com.cube.memory.widget;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,29 +19,29 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cube.memory.entity.EntityPhoto;
+import com.cube.memory.entity.EntityAlbum;
+import com.cube.memory.entity.EntityVideo;
 import com.cube.memory.phone.R;
-import com.cube.memory.util.CubeImageLoader;
 import com.cube.memory.util.CubeInflater;
+import com.cube.sdk.task.CExecutor;
 
-public class ViewSection extends RelativeLayout implements OnClickListener{
+public class ViewVideoSection extends RelativeLayout implements OnClickListener{
 	private TextView mTextViewDate;
 	private TextView mTextViewTotal;
 	private TextView mTextViewMore;
 	private GridView mGridViewImages;
-
-
-	public ViewSection(Context context) {
+	
+	public ViewVideoSection(Context context) {
 		super(context);
 		init(context);
 	}
 
-	public ViewSection(Context context, AttributeSet attrs) {
+	public ViewVideoSection(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init(context);
 	}
 	
-	public ViewSection(Context context, AttributeSet attrs, int defStyle) {
+	public ViewVideoSection(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		init(context);
 	}
@@ -63,30 +65,32 @@ public class ViewSection extends RelativeLayout implements OnClickListener{
 		mTextViewMore.setOnClickListener(this);
 	}
 
-	public void setData(Date date, int total, List<String> images){
-		mTextViewDate.setText(this.getContext().getString(R.string.item_name_date, date.getYear(), date.getMonth(), date.getDay()));
-		mTextViewTotal.setText(this.getContext().getString(R.string.item_name_total, total));
-		mGridViewImages.setAdapter(new AdapterGridView(this.getContext(), images));
+	public void setData(EntityAlbum<EntityVideo> album){
+		mTextViewDate.setText(album.getName());
+		mTextViewTotal.setText(String.valueOf(album.getTotal()));
+		mGridViewImages.setAdapter(new AdapterGridView(this.getContext(), album.getItems()));
 	}
 	
 	private static class AdapterGridView extends BaseAdapter{
+		private ContentResolver mResolver;
 		private Context mContext;
 		
-		private List<String> mImages = new ArrayList<String>();
+		private List<EntityVideo> mItems = new ArrayList<EntityVideo>();
 		
-		public AdapterGridView(Context context, List<String> images){
+		public AdapterGridView(Context context, List<EntityVideo> items){
 			this.mContext = context;
-			this.mImages.addAll(images);
+			this.mResolver = context.getContentResolver();
+			this.mItems.addAll(items);
 		}
 
 		@Override
 		public int getCount() {
-			return this.mImages.size();
+			return this.mItems.size()>16?16:this.mItems.size();
 		}
 
 		@Override
 		public Object getItem(int position) {
-			return this.mImages.get(position);
+			return this.mItems.get(position);
 		}
 
 		@Override
@@ -107,46 +111,31 @@ public class ViewSection extends RelativeLayout implements OnClickListener{
 				view.setPadding(8, 8, 8, 8);
 				view.setImageResource(R.drawable.image_sample_photo);
 			}
-			
-			CubeImageLoader.display(mImages.get(position), view);
+				
+			CExecutor.getInstance().submit(new DisplayTask(mResolver, mItems.get(position).getMediaID(), view));
+			//CubeImageLoader.display(((EntityMedia)mItems.get(position)).getUri(), view);
 			
 			return view;
 		}
 		
-	}
-	
-	public static class EntityImageBlock{
-		private String textLeft;
-		private String textCenter;
-		private String textRight;
-		private List<EntityPhoto> listImages;
-		
-		
-		public String getTextLeft() {
-			return textLeft;
+		private static class DisplayTask implements Runnable{
+			private ContentResolver mResolver;
+			private long mImageID;
+			private ImageView mImageView;
+			
+			public DisplayTask(ContentResolver resolver, long imageID, ImageView imageView){
+				this.mResolver = resolver;
+				this.mImageID = imageID;
+				this.mImageView = imageView;
+			}
+
+			@Override
+			public void run() {
+				Bitmap bitmap = MediaStore.Video.Thumbnails.getThumbnail(mResolver, mImageID, MediaStore.Video.Thumbnails.MICRO_KIND, null);
+				mImageView.setImageBitmap(bitmap);
+			}
+			
 		}
-		public void setTextLeft(String textLeft) {
-			this.textLeft = textLeft;
-		}
-		public String getTextCenter() {
-			return textCenter;
-		}
-		public void setTextCenter(String textCenter) {
-			this.textCenter = textCenter;
-		}
-		public String getTextRight() {
-			return textRight;
-		}
-		public void setTextRight(String textRight) {
-			this.textRight = textRight;
-		}
-		public List<EntityPhoto> getListImages() {
-			return listImages;
-		}
-		public void setListImages(List<EntityPhoto> listImages) {
-			this.listImages = listImages;
-		}
-		
 	}
 
 	@Override
